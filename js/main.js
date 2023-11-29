@@ -1,4 +1,4 @@
-import { printSingleProduct } from './litelement.js';
+//import { printSingleProduct } from './litelement.js';
 const body = document.body;
 const productDiv = body.querySelector("#productos");
 //Endpoint get USERS
@@ -161,13 +161,14 @@ async function printSingleProductById(productId) {
     return await printSingleProduct(prodJson);
     //productDiv.appendChild(divProd);
 }
-/*async function printSingleProduct(prodJson) {
+async function printSingleProduct(prodJson) {
     if (prodJson === undefined) {
         return;
     }
     const divProd = document.createElement("DIV");
 
     divProd.setAttribute("class", "d-flex flex-column align-items-center card-prod-min");
+    divProd.setAttribute("id-prod", prodJson.id);
 
     const imgDiv = document.createElement("DIV");
     imgDiv.setAttribute("class", "img-card-min");
@@ -189,6 +190,9 @@ async function printSingleProductById(productId) {
     precio.setAttribute("class", "text-start w-100 mb-0");
     precio.textContent = prodJson.price + " €";
     const btnAddCarrito = document.createElement("BUTTON");
+    btnAddCarrito.addEventListener("click", () => {
+        agregarCarrito(prodJson.id);
+    });
     btnAddCarrito.setAttribute("class", "btn btn-carrito");
     btnAddCarrito.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg"
         width="30" height="30" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
@@ -200,7 +204,7 @@ async function printSingleProductById(productId) {
     divProd.appendChild(rowPrecio);
 
     return divProd;
-}*/
+}
 
 async function printCategoriesProds() {
     let prods = [];
@@ -215,7 +219,7 @@ async function printCategoriesProds() {
         prods = await getAllProducts();
     }
 
-    //const products = await printSingleProductById(1);
+    //LitElement
     const container = document.querySelector(".contenido-categories");
     const prodsDivProm = prods.map((el) => printSingleProduct(el));
     const prodDivs = await Promise.all(prodsDivProm);
@@ -310,9 +314,96 @@ async function getMaxUserId() {
         throw new Error(e);
     }
 }
+async function getMaxCartId() {
+    let url = 'https://fakestoreapi.com/carts';
+    try {
+        const fetch1 = await fetch(url);
+        const apiRes = await fetch1.json();
+        //Devuelve todos los carts de la Api
+        const allCarts = [];
+        const keysCarts = Object.keys(localStorage);
+        keysCarts.forEach((key) => {
+            if (key.startsWith('c')) {
+                const cart = localStorage.getItem(key);
+                const cartJson = JSON.parse(cart);
+                allCarts.push(cartJson);
+            }
+        })
+        apiRes.forEach((el) => {
+            if (localStorage.getItem("c" + el.id) === null) {
+                allCarts.push(el);
+            }
+        })
+        let arrId = [];
+        allCarts.forEach((el) => {
+            if (el.id !== undefined && !isNaN(el.id)) { arrId.push(el.id) }
+        });
+        const maxId = Math.max(...arrId);
+        if (!isNaN(maxId)) {
+            return maxId;
+        } else {
+            console.log(maxId)
+            throw new Error("Error al obtener maxCartId");
+        }
+    } catch (e) {
+        console.error("Error al obtener todos los carts: ", e);
+        throw new Error(e);
+    }
+}
 
-//LOGIN
 
+
+//CARRITO
+//Post
+async function postCart() {
+    cart = sessionStorage.getItem('cart');
+    localStorage.setItem('c' + JSON.parse(cart).id, cart)
+}
+//Get cart by User
+async function getCartByUserId(userId) {
+    let url = 'https://fakestoreapi.com/users';
+    try {
+        const fetch1 = await fetch(url);
+        const apiRes = await fetch1.json();
+        //Devuelve todos los usuarios de la Api
+        const allUsers = [];
+        const keysUsers = Object.keys(localStorage);
+        keysUsers.forEach((key) => {
+            if (key.startsWith('u')) {
+                const user = localStorage.getItem(key);
+                const userJson = JSON.parse(user);
+                if (userJson.method !== "DELETE") {
+                    allUsers.push(userJson);
+                }
+            }
+        })
+        apiRes.forEach((el) => {
+            if (localStorage.getItem("u" + el.id) === null) {
+                allUsers.push(el);
+            }
+        })
+        return allUsers;
+    } catch (e) {
+        console.error("Error al obtener todos los users: ", e);
+    }
+}
+
+//UPDATE USER
+
+
+//User Info
+const userData = JSON.parse(sessionStorage.getItem('user'));
+
+// Display user information in HTML
+document.getElementById('userEmail').innerText = userData.email;
+document.getElementById('userUsername').innerText = userData.username;
+document.getElementById('userFirstName').innerText = userData.name.firstname;
+document.getElementById('userLastName').innerText = userData.name.lastname;
+document.getElementById('userPhone').innerText = userData.phone;
+document.getElementById('userCity').innerText = userData.address.city;
+document.getElementById('userStreet').innerText = userData.address.street;
+document.getElementById('userStreetNumber').innerText = userData.address.number;
+document.getElementById('userZipCode').innerText = userData.address.zipcode;
 //Logout //Añadido en litelements
 /*if (window.location.pathname !== "/paginas/login.html") {
     document.querySelector(".logout-btn").addEventListener("click", () => { localStorage.removeItem('user'); location.reload(); });

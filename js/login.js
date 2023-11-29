@@ -63,6 +63,22 @@ if (window.location.pathname === "/paginas/login.html") {
                     // Registration successful
                     // Save user data to localStorage
                     sessionStorage.setItem('user', JSON.stringify(userCanLog));
+                    //Cart
+                    let maxId = 0;
+                    try {
+                        maxId = await getMaxCartId();
+                        console.log(maxId)
+                    } catch (e) {
+                        console.error("Error fetching maxId:", e);
+                        throw new Error("Error fetching maxId");
+                    }
+                    const cart = {
+                        "id": maxId + 1,
+                        "userId": userCanLog.id,
+                        "date": new Date().toISOString().split("T")[0],
+                        "products": []
+                    };
+                    sessionStorage.setItem('cart', JSON.stringify(cart));
                     //Mensaje success
                     localStorage.setItem('successMessage', 'Successful Login');
                     localStorage.removeItem('errorMessage');
@@ -82,7 +98,7 @@ if (window.location.pathname === "/paginas/login.html") {
                 location.reload();
             }
         } catch (e) {
-            console.error("Error en el registro:", e);
+            console.error("Error en el login:", e);
             localStorage.setItem('errorMessage', 'Error en el login');
             localStorage.removeItem('successMessage');
             location.reload();

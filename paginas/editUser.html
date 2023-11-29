@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../css/style.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="../js/main.js" defer></script>
+    <script type="text/javascript" src="../js/login.js" defer></script>
+    <script type="text/javascript" src="../js/User.js" defer></script>
+    <script type="text/javascript" src="../js/Product.js" defer></script>
+    <script type="module" src="../js/litelement.js" defer></script>
+    <script type="text/javascript" src="../js/carrito.js" defer></script>
+
+
+    <!--GoogleFonts-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap"
+        rel="stylesheet">
+
+    <!--Bootstrap-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"
+        defer></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+
+    <title>HelloStore</title>
+</head>
+
+<body>
+    <!--NAV-->
+    <my-nav id="avatar-component"></my-nav>
+    <!-- MAIN -->
+    <div id="registro" action="#" class="container">
+        <form id="registroForm" class="mt-4 mx-auto">
+            <fieldset class="form-row reset p-4 align-items-center border border-0 border-round rounded"
+                id="register-card">
+
+                <div class="form-group row g-3 mt-1 mx-auto">
+                    <label for="username" class="col-md-2 col-form-label">Username:</label>
+                    <div class="col-sm-10">
+                        <input type="text" id="username" class="form-control text-info" name="username" required />
+                    </div>
+                </div>
+
+                <div class="form-group row g-3 mt-1 mx-auto">
+                    <label for="mail" class="col-md-2 col-form-label">Email:</label>
+                    <div class="col input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">@</div>
+                        </div>
+                        <input type="email" id="mail" class="form-control text-info" name="mail"
+                            pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$" />
+                    </div>
+                </div>
+
+                <div class="form-group row g-3 mt-1 mx-auto">
+                    <label for="password" class="col-md-2 col-form-label">Password:</label>
+                    <div class="col-sm-10">
+                        <input type="password" id="password" class="form-control text-info" name="password" required
+                            title="Debe contener al menos un número y una mayúscula y una minúscula, y al menos 8 o más carácteres" />
+                    </div>
+                </div>
+
+                <!-- Firstname and Lastname fields -->
+                <div class="form-group row g-3 mt-1 mx-auto">
+                    <label for="firstname" class="col-md-2 col-form-label">First Name:</label>
+                    <div class="col-sm-4">
+                        <input type="text" id="firstname" class="form-control text-info" name="firstname" required />
+                    </div>
+                    <label for="lastname" class="col-md-2 col-form-label">Last Name:</label>
+                    <div class="col-sm-4">
+                        <input type="text" id="lastname" class="form-control text-info" name="lastname" required />
+                    </div>
+                </div>
+
+                <!-- Phone field -->
+                <div class="form-group row g-3 mt-1 mx-auto">
+                    <label for="phone" class="col-md-2 col-form-label">Phone:</label>
+                    <div class="col-sm-10">
+                        <input type="tel" id="phone" class="form-control text-info" name="phone" required />
+                    </div>
+                </div>
+
+                <!--City, Village, Street, Street Number, and Postal Code fields -->
+                <div class="form-group row g-3 mt-1 mx-auto">
+                    <label for="city" class="col-md-2 col-form-label">City:</label>
+                    <div class="col-sm-4">
+                        <input type="text" id="city" class="form-control text-info" name="city" required />
+                    </div>
+                </div>
+                <div class="form-group row g-3 mt-1 mx-auto">
+                    <label for="street" class="col-md-2 col-form-label">Street:</label>
+                    <div class="col-sm-4">
+                        <input type="text" id="street" class="form-control text-info" name="street" required />
+                    </div>
+                    <label for="streetNumber" class="col-md-2 col-form-label">Street Number:</label>
+                    <div class="col-sm-4">
+                        <input type="text" id="streetNumber" class="form-control text-info" name="streetNumber"
+                            required />
+                    </div>
+                </div>
+                <div class="form-group row g-3 mt-1 mx-auto">
+                    <label for="zipCode" class="col-md-2 col-form-label">Zip Code:</label>
+                    <div class="col-sm-10">
+                        <input type="text" id="zipCode" class="form-control text-info" name="zipCode" required />
+                    </div>
+                </div>
+
+                <div class="row g-3 mt-2  d-grid col-6 mx-auto">
+                    <button id="send-btn-register" class="btn btn-primary btn-lg send-btn" type="submit">
+                        Send
+                    </button>
+                </div>
+
+            </fieldset>
+        </form>
+</body>
+
+</html>

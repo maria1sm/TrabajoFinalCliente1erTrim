@@ -1,4 +1,5 @@
 import { LitElement, html, css } from 'https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js';
+//import { agregarCarrito } from './carrito.js';
 
 class MyNav extends LitElement {
 
@@ -78,8 +79,9 @@ class MyNav extends LitElement {
                     </svg>
                 </a>
                 <ul class="dropdown-menu" id="user-dropdown">
-                    <li><a class="dropdown-item" href="#">Edit User</a></li>
-                    <li><a class="dropdown-item logout-btn" href="#" @click="${() => { sessionStorage.removeItem('user'); location.reload() }}">Logout<i
+                    <li><a class="dropdown-item" href="/paginas/userProfile.html">User Profile</a></li>
+                    <li><a class="dropdown-item" href="/paginas/editUser.html">Edit User</a></li>
+                    <li><a class="dropdown-item logout-btn" href="#" @click="${() => { sessionStorage.removeItem('user'); sessionStorage.removeItem('cart'); location.reload() }}">Logout<i
                                 class="bi bi-box-arrow-in-right text-danger ps-1 "></i></a></li>
                 </ul>
             </li>
@@ -102,10 +104,22 @@ class MyNav extends LitElement {
                                             <th></th>
                                         </tr>
                                     </thead>-->
-                                    <tbody></tbody>
-                                </table>
-
-                                <a href="#" id="vaciar-carrito" class="button u-full-width">Vaciar Carrito</a>
+                                    <tbody>
+                                        
+                                    </tbody>
+                                </table> 
+                                <div clkass="d-flex flex-column">
+                                    <div class="d-flex justify-content-between">
+                                        <div>Precio total</div>
+                                        <div id="precio-total"></div>
+                                    </div>                              
+                                    <div class="d-flex flex-row justify-content-between">
+                                        <a href="#" id="vaciar-carrito" class="button u-full-width">Vaciar Carrito</a>
+                                        <a href="#" id="comprar" class="button u-full-width">Comprar</a>
+                                    </div>             
+                                </div>
+                                                
+                                
                             </div>
                         </li>
                     </ul>
@@ -123,7 +137,7 @@ class MyNav extends LitElement {
 customElements.define('my-nav', MyNav);
 
 
-class SingleProduct extends LitElement {
+/*class SingleProduct extends LitElement {
     static styles = css`
     `;
     createRenderRoot() {
@@ -147,7 +161,7 @@ class SingleProduct extends LitElement {
           <h4 class="text-start w-100">${this.prodJson.title}</h4>
           <div class="d-flex align-items-center justify-content-around w-100">
             <p class="text-start w-100 mb-0">${this.prodJson.price} €</p>
-            <button class="btn btn-carrito">
+            <button class="btn btn-carrito" @click="${() => { agregarCarrito(this.prodJson.id) }}">
               <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
                 <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z" />
               </svg>
@@ -164,4 +178,4 @@ export function printSingleProduct(prodJson) {
     const productElement = document.createElement('single-product');
     productElement.prodJson = prodJson;
     return productElement;
-}
+}*/

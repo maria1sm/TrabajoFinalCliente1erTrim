@@ -11,6 +11,10 @@ nav {
     display: none;
 }
 
+.color-blue {
+    color: var(--main-blue);
+}
+
 /*Login*/
 .nav-pills>li>button.active {
     background-color: transparent !important;
@@ -133,7 +137,7 @@ text-overflow: ellipsis;
 }
 
 .borrar-curso {
-    background-color: red;
+    background-color: transparent;
     border-radius: 30%;
     border: transparent;
     padding: 5px 15px;
@@ -144,6 +148,11 @@ text-overflow: ellipsis;
     line-height: normal;
     font-weight: bold;
     margin: 0;
+}
+
+.borrar-curso svg {
+    fill: var(--main-blue);
+    transform: rotate(45deg);
 }
 
 .borrar-curso:active {
@@ -173,18 +182,34 @@ ul {
     box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
     border-radius: 8px;
     padding: 20px;
-    min-height: 400px;
+    max-height: 600px;
+    overflow-y: scroll;
     min-width: 300px;
 }
 
 .vacio {
     padding: 10px;
-    background-color: crimson;
+    background-color: var(--main-blue);
     text-align: center;
     border-radius: 10px;
     color: white;
 }
 
+#carrito img {
+    width: 5rem;
+    padding-right: 1.25rem;
+}
+
+#carrito tbody tr {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding-bottom: 1rem;
+}
+
+#carrito table {
+    width: 100%;
+}
 
 .agregar-carrito {
     margin: 10px 0;
