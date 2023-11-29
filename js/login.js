@@ -191,13 +191,13 @@ if (window.location.pathname === "/paginas/login.html") {
 
 
                 }
-                //location.reload();
+                location.reload();
             }
         } catch (e) {
             console.error("Error en el registro:", e);
             localStorage.setItem('errorMessage', 'Error en el registro');
             localStorage.removeItem('successMessage');
-            //location.reload();
+            location.reload();
         }
     }
 }
