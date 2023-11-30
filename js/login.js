@@ -1,8 +1,8 @@
 const logged = sessionStorage.getItem('user') !== null;
-if (!logged && window.location.pathname !== "/paginas/login.html") {
+if (!logged && window.location.pathname !== "/TrabajoFinalCliente1erTrim/paginas/login.html") {
     window.location.href = "/TrabajoFinalCliente1erTrim/paginas/login.html";
 }
-if (logged && window.location.pathname === "/paginas/login.html") {
+if (logged && window.location.pathname === "/TrabajoFinalCliente1erTrim/paginas/login.html") {
     window.location.href = "../index.html";
 }
 
