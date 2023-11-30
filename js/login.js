@@ -1,6 +1,6 @@
 const logged = sessionStorage.getItem('user') !== null;
 if (!logged && window.location.pathname !== "/paginas/login.html") {
-    window.location.href = "../paginas/login.html";
+    window.location.href = "/paginas/login.html";
 }
 if (logged && window.location.pathname === "/paginas/login.html") {
     window.location.href = "../index.html";
