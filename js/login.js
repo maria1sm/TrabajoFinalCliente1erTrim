@@ -6,7 +6,7 @@ if (logged && window.location.pathname === "/TrabajoFinalCliente1erTrim/paginas/
     window.location.href = "../index.html";
 }
 
-if (window.location.pathname === "/paginas/login.html") {
+if (window.location.pathname === "/TrabajoFinalCliente1erTrim/paginas/login.html") {
 
     const successMessage = localStorage.getItem('successMessage');
     const errorMessage = localStorage.getItem('errorMessage');
