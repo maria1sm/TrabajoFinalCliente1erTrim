@@ -1,12 +1,12 @@
 const logged = sessionStorage.getItem('user') !== null;
-if (!logged && window.location.pathname !== "/TrabajoFinalCliente1erTrim/paginas/login.html") {
-    window.location.href = "/TrabajoFinalCliente1erTrim/paginas/login.html";
+if (!logged && window.location.pathname !== "/paginas/login.html") {
+    window.location.href = "/paginas/login.html";
 }
-if (logged && window.location.pathname === "/TrabajoFinalCliente1erTrim/paginas/login.html") {
+if (logged && window.location.pathname === "/paginas/login.html") {
     window.location.href = "../index.html";
 }
 
-if (window.location.pathname === "/TrabajoFinalCliente1erTrim/paginas/login.html") {
+if (window.location.pathname === "/paginas/login.html") {
 
     const successMessage = localStorage.getItem('successMessage');
     const errorMessage = localStorage.getItem('errorMessage');
@@ -174,13 +174,16 @@ if (window.location.pathname === "/TrabajoFinalCliente1erTrim/paginas/login.html
                 if (Object.keys(arrayErrores).length === 0) {
                     // Registration successful
                     // Save user data to localStorage
-                    addUser(user);
-                    //Mensaje success
-                    localStorage.setItem('successMessage', 'Successful Register');
-                    localStorage.removeItem('errorMessage');
-                    arrayErrores = {};
-
-
+                    const userAdded = await addUser(user);
+                    console.log(userAdded)
+                    if (userAdded) {
+                        //Mensaje success
+                        localStorage.setItem('successMessage', 'Successful Register');
+                        localStorage.removeItem('errorMessage');
+                        arrayErrores = {};
+                    } else {
+                        throw new Error;
+                    }
                 } else {
                     //Mensaje array errores
                     //const arrayErrores1 = Object.entries(arrayErrores);
