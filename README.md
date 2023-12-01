@@ -1,7 +1,7 @@
 # Online Store Webpage 🛍️
 
 
-## Introduction
+## Introduction 🌐
 This documentation provides a comprehensive overview of the JavaScript codebase for an E-Commerce web application. The application interacts with [Fake Store API](https://fakestoreapi.com/) to retrieve and manage user data, products, and shopping carts. 
 
 ## Technologies Used 💻
@@ -25,7 +25,7 @@ The use of async functions ensures a smooth user experience, especially when fet
 ## Responsive Design 📱
 Our webpage is designed to be responsive, providing an optimal viewing experience across various devices, from desktops to smartphones.
 
-## Table of Contents
+## Table of Contents 📜
 
 1. User Management
    - getAllUsers()
