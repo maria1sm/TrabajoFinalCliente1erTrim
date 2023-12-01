@@ -79,6 +79,7 @@ class MyNav extends LitElement {
                     </svg>
                 </a>
                 <ul class="dropdown-menu" id="user-dropdown">
+                    <li><a class="dropdown-item" href="/paginas/addProduct.html">Add Product</a></li>
                     <li><a class="dropdown-item" href="/paginas/userProfile.html">User Profile</a></li>
                     <li><a class="dropdown-item" href="/paginas/editUser.html">Edit User</a></li>
                     <li><a class="dropdown-item logout-btn" href="#" @click="${() => { sessionStorage.removeItem('user'); sessionStorage.removeItem('cart'); location.reload() }}">Logout<i
