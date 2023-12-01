@@ -61,11 +61,7 @@ async function getAllProducts() {
     try {
         const fetch1 = await fetch(url);
         const apiRes = await fetch1.json();
-        /*await apiRes.forEach(element => {
-            if (localStorage.getItem("p" + element.id) === null) {
-                localStorage.setItem("p" + element.id, JSON.stringify(element));
-            }
-        });*/
+
         const allProducts = [];
         const keysProduct = Object.keys(localStorage);
         keysProduct.forEach((key) => {
@@ -107,11 +103,7 @@ async function getAllProductsByCategory(categoria) {
     try {
         const fetch1 = await fetch(url);
         const apiRes = await fetch1.json();
-        /*await apiRes.forEach(element => {
-            if (localStorage.getItem("p" + element.id) === null) {
-                localStorage.setItem("p" + element.id, JSON.stringify(element));
-            }
-        });*/
+
         const allProducts = [];
         const keysProduct = Object.keys(localStorage);
         keysProduct.forEach((key) => {
@@ -139,7 +131,9 @@ async function getProductById(id) {
     let url = `https://fakestoreapi.com/products/${id}`;
     try {
         const fetch1 = await fetch(url);
+        console.log(fetch1)
         const apiRes = await fetch1.json();
+        console.log(apiRes);
         if (localStorage.getItem("p" + apiRes.id) === null) {
             //localStorage.setItem("p" + apiRes.id, JSON.stringify(apiRes));
             return apiRes;
@@ -149,9 +143,19 @@ async function getProductById(id) {
             //y puede haber productos descontinuados
         }
     } catch (e) {
-        console.error("Error al obtener producto por id: ", e);
+        try {
+            if (localStorage.getItem("p" + id).method === "DELETE") {
+                throw new Error
+            } else {
+                return JSON.parse(localStorage.getItem("p" + id));
+            }
+        } catch (e) {
+            console.error("Error al conseguir producto por id", e);
+        }
+
     }
 }
+
 
 
 //devuelve un DIV con el producto según el id que le pases
@@ -218,10 +222,18 @@ async function printSingleProd() {
         if (idParam && /^\d+$/.test(idParam)) {
             const product = await getProductById(idParam);
             const container = document.querySelector(".contenido-producto");
-
+            container.setAttribute("class", "d-flex flex-column align-items-center")
             if (product) {
                 const productDiv = await printSingleProduct(product);
+                productDiv.classList.add("mb-1");
                 container.appendChild(productDiv);
+
+                const editLink = document.createElement("A");
+                editLink.setAttribute("href", `/paginas/productEdit.html?id=${idParam}`);
+                editLink.setAttribute("id", "edit-link");
+                editLink.innerText = "Edit Product";
+                container.appendChild(editLink);
+
             } else {
                 console.error("Product not found");
             }
@@ -264,6 +276,82 @@ if (window.location.pathname === "/paginas/categories.html") {
     printCategoriesProds();
 }
 
+//POST Product Endpoint
+// Add Product Function
+async function addProduct(product) {
+    const apiUrl = 'https://fakestoreapi.com/products';
+
+    try {
+        const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(product),
+        });
+
+        if (response.ok) {
+            const newProduct = await response.json();
+            //newProduct.method = 'POST';
+            localStorage.setItem('p' + newProduct.id, JSON.stringify(newProduct));
+            console.log(newProduct);
+            return true;
+        } else {
+            console.error('Failed to add product. Server returned:', response.status, response.statusText);
+            throw new Error();
+        }
+    } catch (e) {
+        console.error('Error adding product: ', e);
+        return false;
+    }
+}
+
+// Event listener for the Add Product form
+if (window.location.pathname === "/paginas/addProduct.html") {
+    document.getElementById('addProductForm').addEventListener('submit', function (event) {
+        addProductForm(event);
+    });
+
+    // Add Product Form Function
+    async function addProductForm(event) {
+        try {
+            event.preventDefault();
+
+            const addProductForm = document.getElementById('addProductForm');
+            let title = addProductForm.querySelector('#title').value;
+            let price = addProductForm.querySelector('#price').value;
+            let description = addProductForm.querySelector('#description').value;
+            let image = addProductForm.querySelector('#image').value;
+            let category = addProductForm.querySelector('#category').value;
+
+            // Trim
+            title = title.trim();
+            description = description.trim();
+            image = image.trim();
+
+            const newProduct = {
+                title: title,
+                price: price,
+                description: description,
+                image: image,
+                category: category,
+            };
+
+            const added = await addProduct(newProduct);
+
+            if (added) {
+                // Redirect to a desired page after adding the product
+                window.location.href = 'categories.html'; // Replace with the desired URL
+            } else {
+                throw new Error();
+            }
+        } catch (e) {
+            console.error('Error adding product:', e);
+            alert('Error while adding product');
+        }
+    }
+}
+
 //Endpoint POST User (REGISTER)
 //Registra al usuario y devuelve true si no existía antes y es correcto, si no devuielve false
 async function addUser(user) {
@@ -277,6 +365,7 @@ async function addUser(user) {
         console.log(newUser)
         //newUser.id = id;
         localStorage.setItem('u' + user.id, JSON.stringify(user));
+        return true;
     } catch (e) {
         console.error("Error al añadir usuario: ", e);
         return false;
@@ -396,8 +485,7 @@ if (window.location.pathname === "/paginas/editUser.html") {
             }
         } catch (e) {
             console.error("Error en el registro:", e);
-            //localStorage.setItem('errorMessage', 'Error en el edit');
-            //localStorage.removeItem('successMessage');
+
             location.reload();
         }
     }
@@ -498,7 +586,185 @@ async function getMaxCartId() {
     }
 }
 
+//UPDATE Product
 
+//Api Endpoint product update
+async function updateProduct(product) {
+    let url = `https://fakestoreapi.com/products/${product.id}`;
+    try {
+        let productId = product.id;
+        delete product.id;
+        console.log(product);
+        const response = await fetch(url, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(product),
+        });
+
+        if (response.ok) {
+            const updatedProduct = await response.json();
+            updatedProduct.id = productId;
+
+            if (!localStorage.getItem('p' + updatedProduct.id)) {
+                updatedProduct.method = "UPDATE";
+            }
+            localStorage.setItem('p' + updatedProduct.id, JSON.stringify(updatedProduct));
+            console.log(updatedProduct);
+            return true;
+        } else {
+            console.error("Failed to update product. Server returned:", response.status, response.statusText);
+            throw new Error;
+        }
+    } catch (e) {
+        console.error("Error updating product: ", e);
+        return false;
+    }
+}
+
+//FORM Product Edit
+if (window.location.pathname.includes("/paginas/productEdit.html")) {
+    // Extract product ID from the URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const productId = urlParams.get('id');
+
+    document.getElementById('updateProductForm').addEventListener('submit', function (event) {
+
+        updateProductForm(event);
+    });
+
+    // Update Product Function
+    async function updateProductForm(event) {
+        try {
+            event.preventDefault();
+
+
+
+            // Fetch the current product data based on the retrieved ID
+            const currentProduct = await getProductById(productId);
+
+            const updateProductForm = document.getElementById("update");
+            let title = updateProductForm.querySelector('#title').value;
+            let price = updateProductForm.querySelector('#price').value;
+            let description = updateProductForm.querySelector('#description').value;
+            let imageOption = document.querySelector('input[name="imageOption"]:checked').value;
+            let category = updateProductForm.querySelector('#category').value;
+
+            // If "Choose Text" is chosen, set product.image to the current image value
+            let image = (imageOption === 'chooseText') ? currentProduct.image : updateProductForm.querySelector('#customImageText').value;
+
+
+            //Trim
+
+            title = title.trim();
+            description = description.trim();
+            console.log(currentProduct)
+            const updatedProduct = {
+
+                id: currentProduct.id,
+                title: title,
+                price: parseFloat(price),
+                description: description,
+                image: image,
+                category: category,
+
+            };
+            console.log(updatedProduct)
+            const updated = await updateProduct(updatedProduct);
+
+
+            // Redirect to the appropriate page after successful update
+            console.log(updated);
+            if (updated) {
+                window.location.href = `product.html?id=${productId}`;
+            } else {
+                throw new Error;
+            }
+
+
+        } catch (e) {
+            console.error("Error updating product:", e);
+            alert("Error while updating product")
+
+        }
+
+    }
+}
+
+
+
+
+//Form input image
+const imageOptionRadios = document.getElementsByName('imageOption');
+const customImageTextContainer = document.getElementById('customImageTextContainer');
+
+// Add event listener to handle changes in the image option
+imageOptionRadios.forEach(function (radio) {
+    radio.addEventListener('change', function () {
+        // Show/hide the custom image text input based on the selected option
+        customImageTextContainer.style.display = (radio.value === 'writeYourOwn') ? 'block' : 'none';
+    });
+});
+
+//DELETE PRODUCT
+document.addEventListener('DOMContentLoaded', function () {
+    const deleteButton = document.getElementById('delete-link');
+
+    if (deleteButton) {
+        deleteButton.addEventListener('click', async function () {
+            try {
+                // Extract product ID from the URL
+                const urlParams = new URLSearchParams(window.location.search);
+                const productId = urlParams.get('id');
+
+                // Call the function to delete the product
+                const deleteResult = await deleteProductById(productId);
+
+                if (deleteResult) {
+                    // Redirect to a desired page after deletion
+                    window.location.href = 'categories.html'; // Replace with the desired URL
+                } else {
+                    alert('Error deleting product');
+                }
+            } catch (error) {
+                console.error('Error deleting product:', error);
+                alert('Error deleting product');
+            }
+        });
+    }
+});
+
+// Function to delete product by ID 
+async function deleteProductById(productId) {
+    const apiUrl = `https://fakestoreapi.com/products/${productId}`;
+
+    try {
+        // Check if the product is stored in localStorage
+        const storedProduct = localStorage.getItem('p' + productId);
+
+        if (storedProduct) {
+            const parsedProduct = JSON.parse(storedProduct);
+
+            // Check if the stored product has the attribute method === 'update'
+            if (parsedProduct.method === 'UPDATE') {
+                // Change the method attribute to 'DELETE'
+                const response = await fetch(apiUrl, { method: 'DELETE' });
+                const responseJson = await response.json();
+                responseJson.method = 'DELETE';
+                localStorage.setItem("p" + productId, JSON.stringify(responseJson));
+                return response.ok;
+            } else {
+                localStorage.removeItem('p' + productId);
+                return true;
+            }
+        }
+
+    } catch (error) {
+        console.error('Error deleting product:', error);
+        return false;
+    }
+}
 
 //CARRITO
 //Post
@@ -572,9 +838,9 @@ async function printCarts() {
             productItem.className = 'list-group-item d-flex justify-content-between align-items-center';
             productItem.innerHTML = `
                 <div class="media">
-                    <img src="${product.image}" class="mr-3" alt="${product.name}" style="width: 50px;">
+                    <img src="${product.image}" class="mr-3" alt="${product.title}" style="width: 50px;">
                     <div class="media-body">
-                        <h5 class="mt-0">${product.name}</h5>
+                        <h5 class="mt-0">${product.title}</h5>
                         <p>Price: ${product.price}€</p>
                         <p>Quantity: ${productCart.quantity}</p>
                     </div>
@@ -599,9 +865,44 @@ async function printCarts() {
 
 
 
+//Edit Product Fill
+async function fillForm() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const productId = urlParams.get('id');
 
-//User Info
+    // Get product data by ID
+    const productData = await getProductById(productId);
+
+    // Update the form fields with the retrieved product data
+    document.getElementById("title").value = productData.title;
+    document.getElementById("price").value = productData.price;
+    document.getElementById("description").value = productData.description;
+    document.getElementById("category").value = productData.category;
+}
+if (window.location.pathname.includes("/paginas/productEdit.html")) {
+    fillForm();
+
+}
+
+//Edit User Fill
 const userData = JSON.parse(sessionStorage.getItem('user'));
+if (window.location.pathname === "/paginas/editUser.html") {
+
+    document.getElementById("username").value = userData.username;
+    document.getElementById("mail").value = userData.email;
+    document.getElementById("password").value = userData.password;
+    document.getElementById("firstname").value = userData.name.firstname;
+    document.getElementById("lastname").value = userData.name.lastname;
+    document.getElementById("phone").value = userData.phone;
+    document.getElementById("street").value = userData.address.street;
+    document.getElementById("streetNumber").value = userData.address.number;
+    document.getElementById("city").value = userData.address.city;
+    document.getElementById("zipCode").value = userData.address.zipcode;
+
+
+}
+//User Info
+
 if (window.location.pathname === "/paginas/userProfile.html") {
     printCarts();
     document.getElementById('userEmail').innerText = userData.email;
@@ -617,7 +918,4 @@ if (window.location.pathname === "/paginas/userProfile.html") {
 // Display user information in HTML
 
 //Logout //Añadido en litelements
-/*if (window.location.pathname !== "/paginas/login.html") {
-    document.querySelector(".logout-btn").addEventListener("click", () => { localStorage.removeItem('user'); location.reload(); });
-}*/
 

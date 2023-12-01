@@ -70,62 +70,71 @@ async function printCarrito(cart) {
         carritoProds.innerHTML = '';
 
         for (const productCart of cart.products) {
+
             const id = productCart.productId;
             const product = await getProductById(id);
+            if (product.method !== "DELETE") {
 
-            const prod = document.createElement('TR');
-            prod.setAttribute('id', `prod${id}`);
 
-            const img = document.createElement('TD');
-            const price = document.createElement('TD');
-            const quantity = document.createElement('TD');
-            quantity.setAttribute('class', 'cantidad');
-            const borrarProd = document.createElement('TD');
+                const prod = document.createElement('TR');
+                prod.setAttribute('id', `prod${id}`);
 
-            prod.appendChild(img);
-            prod.appendChild(price);
-            prod.appendChild(quantity);
-            prod.appendChild(borrarProd);
+                const img = document.createElement('TD');
+                const price = document.createElement('TD');
+                const quantity = document.createElement('TD');
+                quantity.setAttribute('class', 'cantidad');
+                const borrarProd = document.createElement('TD');
 
-            const image = document.createElement('img');
-            image.setAttribute('src', product.image);
-            img.appendChild(image);
+                prod.appendChild(img);
+                prod.appendChild(price);
+                prod.appendChild(quantity);
+                prod.appendChild(borrarProd);
 
-            const priceTag = document.createElement('p');
-            priceTag.innerText = product.price * productCart.quantity + "€";
-            price.appendChild(priceTag);
+                const image = document.createElement('img');
+                image.setAttribute('src', product.image);
+                img.appendChild(image);
 
-            const quantContent = quantity.appendChild(document.createElement('DIV'));
-            quantContent.innerText = productCart.quantity;
+                const priceTag = document.createElement('p');
+                priceTag.innerText = product.price * productCart.quantity + "€";
+                price.appendChild(priceTag);
 
-            const borrarProdBtn = borrarProd.appendChild(document.createElement('BUTTON'));
-            borrarProdBtn.setAttribute('class', 'borrar-curso');
-            borrarProdBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg"
+                const quantContent = quantity.appendChild(document.createElement('DIV'));
+                quantContent.innerText = productCart.quantity;
+
+                const borrarProdBtn = borrarProd.appendChild(document.createElement('BUTTON'));
+                borrarProdBtn.setAttribute('class', 'borrar-curso');
+                borrarProdBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg"
             width="30" height="30" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
             <path
                 d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z" />
         </svg>`;
 
-            borrarProdBtn.addEventListener('click', () => {
-                if (productCart.quantity > 1) {
-                    productCart.quantity -= 1;
-                    quantContent.innerText = productCart.quantity;
-                } else {
-                    // Remove the product from the cart when quantity is 0
-                    cart.products = cart.products.filter(p => p.productId !== id);
-                    // Remove the product element from the DOM
-                    prod.remove();
-                }
-                // Recalculate total price and update the price element
-                const totalPrice = product.price * productCart.quantity;
-                priceTag.innerText = totalPrice + "€";
+                borrarProdBtn.addEventListener('click', () => {
+                    if (productCart.quantity > 1) {
+                        productCart.quantity -= 1;
+                        quantContent.innerText = productCart.quantity;
+                    } else {
+                        // Remove the product from the cart when quantity is 0
+                        cart.products = cart.products.filter(p => p.productId !== id);
+                        // Remove the product element from the DOM
+                        prod.remove();
+                    }
+                    // Recalculate total price and update the price element
+                    const totalPrice = product.price * productCart.quantity;
+                    priceTag.innerText = totalPrice + "€";
 
-                // Update session storage and total price
-                updateCart(cart);
-                calculateAndUpdateTotalPrice(cart);
-            });
+                    // Update session storage and total price
+                    updateCart(cart);
+                    calculateAndUpdateTotalPrice(cart);
+                });
 
-            carritoProds.appendChild(prod);
+                carritoProds.appendChild(prod);
+            } else {
+                cart.products = cart.products.filter(product => product.productId !== id);
+
+                //Update the local storage with the modified cart
+                sessionStorage.setItem('cart', JSON.stringify(cart));
+            }
         }
     } catch (e) {
         console.error("Error al imprimir productos del carrito", e);
