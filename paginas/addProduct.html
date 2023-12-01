@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../css/style.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="../js/main.js" defer></script>
+    <script type="text/javascript" src="../js/login.js" defer></script>
+    <script type="text/javascript" src="../js/User.js" defer></script>
+    <script type="text/javascript" src="../js/Product.js" defer></script>
+    <script type="module" src="../js/litelement.js" defer></script>
+    <script type="text/javascript" src="../js/carrito.js" defer></script>
+
+
+    <!--GoogleFonts-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap"
+        rel="stylesheet">
+
+    <!--Bootstrap-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"
+        defer></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+
+    <title>HelloStore</title>
+</head>
+
+<body>
+    <!--NAV-->
+    <my-nav id="avatar-component"></my-nav>
+    <!-- MAIN -->
+    <!-- Add Product Form -->
+    <div id="add-product" action="#" class="container">
+        <h3 class="card-title"><span class="color-blue">Add</span>Product</h3>
+        <div id="error-product" class="alert-warning alert hidden"></div>
+        <div id="success-product" class="alert-success alert hidden"></div>
+        <form id="addProductForm" class="mb-5 mx-auto">
+            <fieldset class="form-row reset p-4 align-items-center border border-0 border-round rounded"
+                id="add-product-card">
+
+                <div class="form-group row g-3 mt-1 mx-auto">
+                    <label for="title" class="col-md-2 col-form-label">Title:</label>
+                    <div class="col-sm-10">
+                        <input type="text" id="title" class="form-control text-info" name="title" required />
+                    </div>
+                </div>
+
+                <div class="form-group row g-3 mt-1 mx-auto">
+                    <label for="price" class="col-md-2 col-form-label">Price:</label>
+                    <div class="col-sm-10">
+                        <input type="number" id="price" class="form-control text-info" name="price" step="0.01" required
+                            min="0.01" />
+                    </div>
+                </div>
+
+                <div class="form-group row g-3 mt-1 mx-auto">
+                    <label for="description" class="col-md-2 col-form-label">Description:</label>
+                    <div class="col-sm-10">
+                        <textarea id="description" class="form-control text-info" name="description"
+                            required></textarea>
+                    </div>
+                </div>
+
+                <div class="form-group row g-3 mt-1 mx-auto">
+                    <label for="image" class="col-md-2 col-form-label">Image:</label>
+                    <div class="col-sm-10">
+                        <input type="text" id="image" class="form-control text-info" name="image" required />
+                    </div>
+                </div>
+
+                <div class="form-group row g-3 mt-1 mx-auto">
+                    <label for="category" class="col-md-2 col-form-label">Category:</label>
+                    <div class="col-sm-10">
+                        <select id="category" class="form-select text-info" name="category" required>
+                            <option value="jewelery">Jewellery</option>
+                            <option value="electronics">Electronics</option>
+                            <option value="men's clothing">Men's Clothing</option>
+                            <option value="women's clothing">Women's Clothing</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row g-3 mt-2  d-grid col-6 mx-auto">
+                    <button id="send-btn-add-product" class="btn btn-primary btn-lg send-btn" type="submit">
+                        Add Product
+                    </button>
+                </div>
+
+            </fieldset>
+        </form>
+    </div>
+
+</body>
+
+</html>

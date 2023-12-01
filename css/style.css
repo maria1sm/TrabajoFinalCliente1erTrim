@@ -21,6 +21,20 @@ nav {
     /*color: black !important;*/
 }
 
+a {
+    color: black !important;
+    text-decoration: none !important;
+}
+
+#edit-link {
+    text-decoration: underline !important;
+}
+
+#delete-link {
+    text-decoration: underline !important;
+    background-color: transparent;
+}
+
 .nav-pills>li>button.active>div {
     background: var(--main-blue) !important;
     border-radius: 20px;
