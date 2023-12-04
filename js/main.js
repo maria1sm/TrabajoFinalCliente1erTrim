@@ -758,6 +758,12 @@ async function deleteProductById(productId) {
                 localStorage.removeItem('p' + productId);
                 return true;
             }
+        } else {
+            const response = await fetch(apiUrl, { method: 'DELETE' });
+            const responseJson = await response.json();
+            responseJson.method = 'DELETE';
+            localStorage.setItem("p" + productId, JSON.stringify(responseJson));
+            return response.ok;
         }
 
     } catch (error) {
